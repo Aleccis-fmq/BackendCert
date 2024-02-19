@@ -135,7 +135,7 @@
     ```
 
 
-4. **Crear el Controlador:**
+5. **Crear el Controlador:**
    - Define un controlador REST que maneje las solicitudes HTTP y llame a los métodos del servicio correspondientes.
    - Anotaciones `@RestController`,`@RequestMaping("")`,`@Get,@Post,@Delete,@Put`
    - Uso de Modelo Principal
@@ -193,10 +193,10 @@
    ```
    
 
-5. **Configurar la Aplicación Spring Boot:**
+6. **Configurar la Aplicación Spring Boot:**
    - Asegúrate de tener las anotaciones adecuadas en tu clase principal de la aplicación.
    
-6. **Configurar la Base de Datos:**
+7. **Configurar la Base de Datos:**
    - Define la conexión a la base de datos en `application.properties` o `application.yml`.
    - DB mysql dependeciaMysql
    ```properties
@@ -209,7 +209,7 @@
    spring.jpa.hibernate.ddl-auto=update
    ```
 
-7. **Ejecutar la Aplicación:**
+8. **Ejecutar la Aplicación:**
    - Ejecuta tu aplicación Spring Boot y prueba los endpoints REST utilizando herramientas como Postman o CURL.
    ```http
    #Localhost + @RequestMaping + @MetodMapping
