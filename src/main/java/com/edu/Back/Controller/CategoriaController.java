@@ -86,7 +86,7 @@ public class CategoriaController {
     }
 
     // Registrar
-    @PostMapping("/3")
+    @PostMapping("/2")
     public ResponseEntity<Void> registrar2(@Valid @RequestBody CategoriaDto catdto) throws Exception {
 
         Categoria cat =  mapper.map(catdto, Categoria.class);
@@ -101,7 +101,7 @@ public class CategoriaController {
     }
 
     // MODIFICAR
-    @PutMapping("/3")
+    @PutMapping("/2")
     public ResponseEntity<Categoria> modificar(@Valid @RequestBody CategoriaDto catdto) throws Exception {
         Categoria cat = mapper.map(catdto, Categoria.class);
         Categoria obj = service.modificar(cat);
@@ -112,7 +112,7 @@ public class CategoriaController {
 
     //
     // ELIMINAR
-    @DeleteMapping("/1/{id}")
+    @DeleteMapping("/2/{id}")
     public ResponseEntity<Void> eliminar2(@PathVariable("id") Integer id) throws Exception {
         service.eliminar(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
