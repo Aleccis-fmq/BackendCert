@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -117,6 +118,37 @@ public class CategoriaController {
         service.eliminar(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
+
+    //LISTADO - DTO - CONDICION
+    @GetMapping("/3")
+    public ResponseEntity<?> listar3() throws Exception {
+        List<CategoriaDto> lista2 = service.listar().stream().map(p -> mapper.map(p, CategoriaDto.class))
+                .collect(Collectors.toList());
+
+        //condicional de lista vacia
+        if (lista2.isEmpty()){  //404
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lista vacia");
+
+        }else {
+            return ResponseEntity.ok(lista2);
+        }
+
+    }
+    //LISTADO X ID - DTO-CONDICION
+    @GetMapping("/3/{id}")
+    public ResponseEntity<?> listarxid3(@PathVariable("id") Integer id) throws Exception {
+        Categoria obj = service.listarPorId(id);
+
+        if (obj == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El ID proporcionado no existe" + id);
+        }
+
+        CategoriaDto dto = mapper.map(obj, CategoriaDto.class);
+        return ResponseEntity.ok(dto);
+    }
+
+    //AGREGAR - DTO -CONDICION
+
 
 
 }
