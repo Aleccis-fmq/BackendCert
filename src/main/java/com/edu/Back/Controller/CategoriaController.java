@@ -6,9 +6,11 @@ import com.edu.Back.Service.ICategoriaService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -140,7 +142,7 @@ public class CategoriaController {
         Categoria obj = service.listarPorId(id);
 
         if (obj == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El ID proporcionado no existe" + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El ID proporcionado no existe " + id);
         }
 
         CategoriaDto dto = mapper.map(obj, CategoriaDto.class);
@@ -148,7 +150,64 @@ public class CategoriaController {
     }
 
     //AGREGAR - DTO -CONDICION
+    @PostMapping("/3")
+    public ResponseEntity<?> registrar3(@Valid @RequestBody CategoriaDto catdto, BindingResult result) throws Exception {
+        // Verifica si hay errores de validación en los datos de entrada
+        if (result.hasErrors()) {
+            // Si hay errores, construye una lista de mensajes de error
+            List<String> errors = result.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            // Devuelve una respuesta con un código de estado 400 (Bad Request) y la lista de mensajes de error
+            return ResponseEntity.badRequest().body(errors);
+        }
 
+        Categoria cat = mapper.map(catdto, Categoria.class);
+        Categoria obj = service.registrar(cat);
 
+        // ACCESO AL RECURSO :8080/usuarios/2/1
+        URI loc = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(obj.getIdCategoria()).toUri();
+
+        // Devuelve una respuesta con un código de estado 201 (Created) y un mensaje en el cuerpo
+        return ResponseEntity.created(loc).body("Registro creado correctamente");
+    }
+
+    //MODIFICAR -3- DTO CONDICION-MAPER
+    @PutMapping("/3")
+    public ResponseEntity<?> modificar3(@Valid @RequestBody CategoriaDto catdto, BindingResult result) throws Exception {
+        // Verifica si hay errores de validación en los datos de entrada
+        if (result.hasErrors()) {
+            // Si hay errores, construye una lista de mensajes de error
+            List<String> errors = result.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            // Devuelve una respuesta con un código de estado 400 (Bad Request) y la lista de mensajes de error
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        Categoria cat = mapper.map(catdto, Categoria.class);
+        Categoria obj = service.modificar(cat);
+
+        // Devuelve una respuesta con un código de estado 200 (OK) y un mensaje en el cuerpo
+        return ResponseEntity.ok("Registro modificado correctamente");
+    }
+
+    //ELIMINAR X ID -DTO , CONDICION , MAPER
+    @DeleteMapping("/3/{id}")
+    public ResponseEntity<?> eliminar3(@PathVariable("id") Integer id) throws Exception {
+
+        Categoria obj = service.listarPorId(id);
+        // Verificar si el ID existe antes de eliminar
+        if (obj == null) {
+            // Si el ID no existe, devuelve una respuesta con un código de estado 404 (Not Found) y un mensaje en el cuerpo
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El ID proporcionado no existe : " + id);
+        }
+        service.eliminar(id);
+        return ResponseEntity.ok().body("Eliminado correctamente");
+
+    }
 
 }
