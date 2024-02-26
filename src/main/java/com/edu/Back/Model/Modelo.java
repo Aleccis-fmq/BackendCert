@@ -1,11 +1,15 @@
 package com.edu.Back.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@Data
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Modelo {
 
     @Id
